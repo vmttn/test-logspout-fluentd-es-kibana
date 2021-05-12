@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  api:
+    build: ./api
+    restart: on-failure
+    ports:
+      - "8000:8000"
+
+  logspout:
+    image: gliderlabs/logspout:v3.2.12
+    depends_on:
+      - fluentd
+    restart: on-failure
+    command: syslog://fluentd:55555?filter.labels=com.docker.compose.service:api
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+        
+  fluentd:
+    build: ./fluentd
+    depends_on:
+      - elasticsearch
+    restart: on-failure
+    volumes:
+      - ./fluentd/fluentd.conf:/fluentd/etc/fluent.conf
+
+  elasticsearch:
+    image: elasticsearch:7.12.1
+    restart: on-failure
+    environment:
+      - discovery.type=single-node
+
+  kibana:
+    image: kibana:7.12.1
+    depends_on:
+      - elasticsearch
+    restart: on-failure
+    ports:
+      - "5601:5601"
