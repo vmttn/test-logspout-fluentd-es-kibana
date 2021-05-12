@@ -6,7 +6,7 @@ Demonstrate Passive Logging (with `logspout`): monitored services are unaware of
 
 ### 1. Run `docker-compose up -d`
 
-### 2. Browse to `http://localhost:8000/`
+### 2. Browse to [`http://localhost:8000/`](http://localhost:8000/)
 
 ### 3. Setup an index on Kibana
 
